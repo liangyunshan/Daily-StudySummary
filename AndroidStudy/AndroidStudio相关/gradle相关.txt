@@ -1,0 +1,63 @@
+一、概述
+在Android中Gradle涉及三个方面：
+---Gradle是个构建系统，能够简化你的编译、打包、测试过程。
+
+---Gradle Wrapper的作用是简化Gradle本身的安装、部署。
+	不同版本的项目可能需要不同版本的Gradle，手工部署的话比较麻烦，
+	而且可能产生冲突，所以需要Gradle Wrapper帮你搞定这些事情。
+	Gradle Wrapper是Gradle项目的一部分。
+
+---Android Plugin for Gradle是一堆适合Android开发的Gradle插件的集合，
+	主要由Google的Android团队开发，Gradle不是Android的专属构建系统，
+	但是有了Android Plugin for Gradle的话，你会发现使用Gradle构建
+	Android项目尤其的简单。
+
+二、Gradle Wrapper说明	
+在Android Studio中的android项目中有一个gradle/wrapper目录，目录下有两个文件：
+	gradle-wrapper.jar
+	gradle-wrapper.properties
+	
+	gradle-wrapper.jar是Gradle Wrapper的主体功能包，Android Studio安装时产生，
+	新建项目时，自动拷贝到项目中的gradle/wrapper目录中。
+	
+	gradle-wrapper.properties文件中指明项目中需要的Gradle的版本、下来来源、存放路径。
+	如下示例：
+		distributionBase=GRADLE_USER_HOME			//解压根路径
+		distributionPath=wrapper/dists				//解压子目录
+		zipStoreBase=GRADLE_USER_HOME				//下载根目录
+		zipStorePath=wrapper/dists					//下载子目录
+		distributionUrl=https\://services.gradle.org/distributions/gradle-3.3-all.zip
+													//下载来源
+		
+		ps：
+			GRADLE_USER_HOME一般指~/.gradle，本机中为C:\Users\ts\.gradle
+			本机中以上四个物理路径为：
+				C:/Users/ts/.gradle
+				C:/Users/ts/.gradle/wrapper/dists
+				C:/Users/ts/.gradle
+				C:/Users/ts/.gradle/wrapper/dists
+	Gradle处理过程如下：
+		1、从distributionUrl指定的路径下载gradle包，并保存在zipStoreBase与zipStorePath
+			指定的路径下；
+		2、从zipStoreBase与zipStorePath指定的路径下获取gradle包，并解压至distributionBase
+			与distributionPath指定的路径下；
+
+三、Android Plugin for Gradle说明
+	Gradle执行过程中，读取build.gradle文件，获取需要的版本、保存物理路径、下载来源
+	举个栗子：
+	buildscript {
+		repositories {
+			jcenter()
+		}
+		dependencies {
+			classpath 'com.android.tools.build:gradle:2.3.0'
+
+			// NOTE: Do not place your application dependencies here; they belong
+			// in the individual module build.gradle files
+		}
+	}
+	下载2.3.0版本保存在默认根目录下的com.android.tools.build文件夹中。下载来源为
+	jcenter；本机中实际物理路径为：
+		C:/Users/ts/.gradle/caches/modules-2/files-2.1/com.android.tools.build
+	
+			

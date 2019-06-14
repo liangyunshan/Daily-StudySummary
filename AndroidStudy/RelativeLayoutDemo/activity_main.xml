@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/MainRelative"
+    android:background="#111111">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="左边"
+        android:layout_alignParentLeft="true"
+        tools:ignore="ButtonStyle" />
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="顶部"-->
+        <!--android:layout_alignParentTop="true"-->
+
+        <!--tools:ignore="ButtonStyle" />-->
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="右边"
+        android:layout_alignParentRight="true"
+        tools:ignore="ButtonStyle" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="竖直居中"
+        android:layout_centerVertical="true"
+        tools:ignore="ButtonStyle"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="中心位置"
+        android:layout_centerInParent="true"
+        tools:ignore="ButtonStyle"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="水平居中"
+        android:layout_centerHorizontal="true"
+        tools:ignore="ButtonStyle"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="底部"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        tools:ignore="ButtonStyle"/>
+
+</RelativeLayout>

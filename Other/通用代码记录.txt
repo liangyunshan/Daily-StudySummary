@@ -1,0 +1,21 @@
+#define RETURN_IF(condition, ret) do {if (condition) return (ret);} while (0)
+#define RETURN_VOID_IF(condition) do {if (condition) return;} while (0)
+
+#define RETURN_IF_NULL(condition, ret)\
+do {\
+    if (condition == nullptr) {\
+        ERROR("point empty!!");\
+        return (ret);\
+    }\
+} while (0)
+
+#define RETURN_VOID_IF_NULL(condition)\
+do {\
+    if (condition == nullptr) {\
+        ERROR("point empty!!");\
+        return;\
+    }\
+}\
+while (0)
+
+#define DO_IF(condition, action) do {if (condition) {action};} while (0)

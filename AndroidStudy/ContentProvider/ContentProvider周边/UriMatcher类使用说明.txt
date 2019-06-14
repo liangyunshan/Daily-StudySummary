@@ -1,0 +1,29 @@
+UriMatcher概述：
+	UriMatcher常用于Android四大组件之一的ContentProvider，用于帮助过滤匹配多个Uri。
+	ContenProvider中通过Uri来指定访问数据源，当有多个数据源时，访问提供的数据就需要
+	区分不同的Uri。
+	URI为如下格式字符串：
+		<prefix>://<authority>/<data_type>/<id>
+
+UriMatcher使用：
+	接口：		
+		public UriMatcher(int code)
+			为构造函数，一般选择UriMatcher中的NO_MATCH值作为code参数值
+		使用方式如下：
+			final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+		ps:其中，当通过match函数匹配给定的Uri失败后，当根据分隔符"/"拆分组成Uri的path部分后，
+		拆分列表长度为0，或者Uri没有authority部分时，将code作为返回值返回。
+		
+		public void addURI(String authority, String path, int code)
+			类似于key-value结构，添加一个URI用于之后进行比对，URI由authority于path组成，
+			key值URI对应的value为code
+		使用方法如下：
+			matcher.addURI(TestContract.CONTENT_AUTHORITY, TestContract.PATH_TEST, 100);
+		
+		public int match(Uri uri)
+			匹配给定的uri，返回值为使用addURI时的参数code值
+			
+		
+			
+		
+		

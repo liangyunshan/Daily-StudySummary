@@ -1,0 +1,248 @@
+一、manifest文件简介：
+	(1)每一个Android应用都必须包含一个manifest文件，即AndroidManifest.xml，保存在应用程序根目录下；
+	(2)manifest文件是作为Android操作系统与应用程序之间的接口；
+	(3)在manifet文件中声明所有的组件，未被申明的组件将无法被操作系统所识别。
+
+二、manifest详细说明：
+	AndroidManifest.xml主体内容如下：
+
+	<?xml version="1.0" encoding="utf-8"?>
+
+	<manifest>
+
+		<uses-permission />
+		<permission />
+		<permission-tree />
+		<permission-group />
+		<instrumentation />
+		<uses-sdk />
+		<uses-configuration />  
+		<uses-feature />  
+		<supports-screens />  
+		<compatible-screens />  
+		<supports-gl-texture />  
+
+		<application>
+
+			<activity>
+				<intent-filter>
+					<action />
+					<category />
+					<data />
+				</intent-filter>
+				<meta-data />
+			</activity>
+
+			<activity-alias>
+				<intent-filter> . . . </intent-filter>
+				<meta-data />
+			</activity-alias>
+
+			<service>
+				<intent-filter> . . . </intent-filter>
+				<meta-data/>
+			</service>
+
+			<receiver>
+				<intent-filter> . . . </intent-filter>
+				<meta-data />
+			</receiver>
+
+			<provider>
+				<grant-uri-permission />
+				<meta-data />
+				<path-permission />
+			</provider>
+
+			<uses-library />
+
+		</application>
+
+	</manifest>
+	
+三、manifest文件节点标签分析：
+	1.manifest是AndroidManifest.xml的根节点，节点中设定命名空间和包属性，
+	   节点内部应至少包含一个application子节点标签
+		(1)使用xmlns:android来定义android命名空间，举个栗子如下：
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android中命名空间是为了避免元素命名冲突；
+			xmls:为xml namespace,表明开始定义一个命名空间；
+			android称作namespace-prefix（命名空间前缀），代表命名空间的名字，
+			名空间中的属性；
+			http://schemas.android.com/apk/res/android是一个URI（统一资源标识符），
+			值是固定的，相当于一个常量；
+			
+			常用的命名空间还有：
+			tools，内容为xmlns:tools=”http://schemas.android.com/tools”，称为工具命名空间，
+			在开发阶段发挥作用帮助开发人员的工具，即当程序被打包后，所有关于tools属性都被摒弃；
+			举个栗子：
+				<?xml version="1.0" encoding="utf-8"?>
+				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					xmlns:tools="http://schemas.android.com/tools"
+					android:orientation="vertical"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent">
+					<TextView
+						tools:layout_gravity="center"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Hello,World"/>
+				</LinearLayout>
+			这其中显示内容为"Hello,World"的TextView设置了tools:layout_gravity="center"，这使得
+			在设计阶段，"Hello,World"显示在TextView中心，但当实际打包并运行时默认显示在左边；
+			
+			在Android中，命名空间可分为3种:
+			a.xmlns:android=”http://schemas.android.com/apk/res/android”
+			b.xmlns:tools=”http://schemas.android.com/tools”
+			c.xmlns:app=”http://schemas.android.com/apk/res-auto”
+			其中，1和2命名空间里的属性是系统封装好的，第3种命名空间里的属性是用户自定义的
+			
+		(2)使用package指定java主程序包的包名
+			确定的包名同时也是应用进程的默认名称，另外也是生成的应用程序资源文件的索引类(R)的包名
+		
+		(3)使用sharedUserId表明数据权限
+			默认情况下Android给应用程序分配唯一UserID，因此不同应用程序不能访问共享数据；
+			如果不同的应用的sharedUserId都设置为相同的，则这些应用之间可以互相共享数据。
+		
+		(4)使用sharesUserLabel设置共享的用户名
+			起作用的前提是设置了sharedUserId属性。
+		
+		(5)使用versionCode设置版本
+			用于版本识别或者版本升级，必须是一个整型值，表明应用更新过多少次。
+			
+		(6)使用versionName展示版本名称
+			用于向用户展示当前版本
+			
+		(7)使用installLocation设置应用安装位置
+			用于程序安装时选择的安装位置，可选值为internalOnly、auto、preferExternal，分别表示：
+			internalOnly--安装到内部存储空间，安装后无法移动到SD卡上
+			auto--系统根据实际存储空间选择在内部存储还是SD卡安装，安装后可在内部存储和SD卡之间移动
+			preferExternal--系统优先考虑安装到SD卡上(用户可选择改为内部存储)，如果SD卡已满则安装到内部存储中
+	
+	2.指定uses-permission标签获取相关操作的权限
+		权限内容可以是系统权限也可以是自定义权限
+		<uses-permission android:name="android.permission.READ_CONTACTS"/>	//获取读取通讯录权限
+		<uses-permission android:name="me.pengtao.READ"/>	//获取自定义读权限
+	
+	3.使用permission标签定义安全访问许可
+		当程序中定义一个访问许可后，其他程序访问该程序必须先要获取该permission
+		标签中属性包括：
+			android:description		权限描述，用户可读内容
+			android:icon			权限图标
+			android:label			权限标签
+			android:name			权限名称，其他程序通过权限的名称来获取指定权限
+			android:permissionGroup	权限所属分组
+			android:protectionLevel	权限安全等级，可选值包括normal,dangerous,aignatures,signatureOrSystem
+			
+			ps:当其他程序通过uses-permission获取该程序中permission中指定的权限后，在应用的
+				权限中会显示permission中设置的属性
+			ps:description属性值必须是string资源文件中的值
+			ps:可以使用多个标签分别描述多个不同的访问许可
+			   
+	
+	4.使用permission-tree标签声明权限树基础名称
+		声明权限树的应用程序，即动态权限的命名空间，可以通过PackageManager.addPermission()
+		在权限树中动态添加权限，添加的所有动态权限以权限树基础名称为前缀。
+		标签中属性包括：
+			android:icon	权限树图标
+			android:label	权限树标签
+			android:name	权限树基础名称，为权限树中所有权限的名称前桌，
+							必须包含两个及以上"."分隔符
+
+	5.使用permission-group标签描述permission所属的组
+		不定义权限，用于区别不同的权限
+		标签中属性包括：
+			android:icon		权限分组图标
+			android:label		权限分组标签
+			android:name		权限分组名称，权限需要设置所属分组时将permissionGroup设置为该值
+	
+	6.使用instrumentation标签声明仪表类
+		Instrumentation类能够监视应用程序与系统的交互，主要作用是用于单元测试
+		标签中属性包括：
+			android:functionalTest		指定Instrumentation是否可以作为一个功能性的测试运行
+			android:handleProfiling		指定Instrumentation对象是否开启和关闭分析功能
+			android:icon				指定Instrumentation类图标
+			android:label				指定Instrumentation类用户可读标签
+			android:name				指定Instrumentation类名称，简写则使用package中指定的包名
+										否则需要完整的Java类名
+			android:targetPackage		指定Instrumentation对象监听的应用程序
+	
+	7.使用uses-sdk标签定义应用程序能够运行的版本
+		定义能够运行应用程序的最小sdk版本与最大sdk版本
+		标签中属性包括：
+			android:minSdkVersion		支持运行的最小sdk版本
+			android:maxSdkVersion		支持运行的最大sdk版本，一般不设置，因为Android系统向后兼容
+	
+	8.使用application标签声明应用程序
+		标签中属性包括：
+			android:icon				设置应用程序的图标
+			android:label				设置应用程序用户可读标签
+			android:logo				设置应用程序的Logo
+			android:allowBackup			设置允许备份该应用程序的安装包与应用数据
+			android:supportsRtl			设置应用程序是否支持从右往左的布局(RTL指的是right to left)
+			android:theme				设置主题
+			
+			
+		(1)activity标签
+			被包含在<application>标签中，内部包含<intent-filter>、<meta-data>、<layout>标签。
+			(1.1)intent-filter标签
+				内部通过<action>、<category>、<data>子标签描述，标签必须包含一个或者多个<action>
+				
+			
+			
+		(2)使用provider标签声明一个ContentProvider组件
+			应用程序中的所有ContextProvider子类实现必须在manifest文件的<provider>标签中声明。
+			
+			标签中仅声明本程序中定义的ContentProvider子类，至于应用程序中使用的其他应用的
+			ContentProvider子类
+			provider结构如下：
+			<provider android:authorities="list"
+					  android:enabled=["true" | "false"]
+					  android:exported=["true" | "false"]
+					  android:grantUriPermissions=["true" | "false"]
+					  android:icon="drawable resource"
+					  android:initOrder="integer"
+					  android:label="string resource"
+					  android:multiprocess=["true" | "false"]
+					  android:name="string"
+					  android:permission="string"
+					  android:process="string"
+					  android:readPermission="string"
+					  android:syncable=["true" | "false"]
+					  android:writePermission="string">
+				. . .
+			</provider>
+			
+			android:authorities				标识内容提供者范围内的数据URI的授权列表,多个授权以分号分隔
+											(必须指定)
+			android:readPermission			标识客户端读取内容提供者中数据的权限信息
+			android:writePermission			标识客户端写人内容提供者中数据的权限信息
+			android:name					标识内容提供者的实现子类名称
+											(必须指定)
+			android:permission				标识客户端读写内容提供者中数据的权限信息
+											(优先级低于readPermission与writePermission)
+			android:enabled					是否可以由系统实例化内容提供者，默认值为true
+											(<application>标签有自己的enable属性，作用于全部的应用组件
+											其中包括内容提供者，两个标签的enable属性值必须都是true，如
+											果其中之一为false，那么这个内容提供者不可用，无法被实例化)
+			android:exported				标识内容提供者对于其他应用是否是可用的，如果值为true，那么
+											内容提供者对于其他应用是可用的。任何其他应用可以通过内容提
+											供者的URI来访问它，这也取决于为内容提供者指定的权限；如果值
+											为false，那么内容提供者对于其他应用是不可用的，这限制了对应
+											用的内容提供者的访问，只有具有与内容提供者相同用户ID(UID)的
+											应用才能访问它。
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+

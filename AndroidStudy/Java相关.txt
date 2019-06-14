@@ -1,0 +1,4 @@
+1、关键字instanceof理解
+	用来在运行是指出对象是否是特定类的一个实例，返回值是一个bool类型值
+	用法：
+	bool ret = object instanceof class;

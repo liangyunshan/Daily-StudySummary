@@ -1,0 +1,37 @@
+	Toast是Android中一种简易的消息提示框，一般用于提示用户某种时间发生，
+但Toast永远不会获得焦点、无法被点击。在尽可能不引人注意的同时，向用户
+显示必要提示信息。另外，Toast显示时间有限，根据程序设置的时间显示后自动
+消失。
+	Toast常用API：
+	makeText(Context context, CharSequence text, int duration)
+	makeText(Context context, int resId, int duration)
+	ps:
+		第三参数duration只能是两个值之一Toast.LENGTH_SHORT和Toast.LENGTH_LONG，
+		Toast.makeText(MainActivity.this, “Hello World！”, Toast.LENGTH_LONG);
+		
+	public void show()
+		显示
+	public void setView(View view)
+		设置需要显示的视图
+	public void setDuration(int duration)
+		设置显示时间(只能是Toast.LENGTH_SHORT和Toast.LENGTH_LONG之一)
+	public void setMargin(float horizontalMargin, float verticalMargin)
+		设置视图的边距(水平边距与垂直方向边距)
+	public void setGravity(int gravity, int xOffset, int yOffset)
+		设置通知应该出现在屏幕上的位置
+	ps:
+		第1参数gravity可用Gravity类中提供的常量
+			Gravity.NO_GRAVITY Gravity.TOP Gravity.BOTTOM Gravity.LEFT RIGHT
+			Gravity.CENTER_VERTICAL Gravity.CENTER_HORIZONTAL Gravity.CENTER等等
+		需要导入Gravity：import android.view.Gravity;
+		
+	使用示例：
+		Toast t_tost = Toast.makeText(getBaseContext(),
+                uri.toString(), Toast.LENGTH_LONG);
+        t_tost.setText("Hello World!");
+        t_tost.setDuration(Toast.LENGTH_SHORT);
+        t_tost.setMargin(10,10);
+        t_tost.setGravity(Gravity.NO_GRAVITY,0,0);
+        t_tost.show();
+	
+		
