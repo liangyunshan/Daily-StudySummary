@@ -1,0 +1,206 @@
+/**
+ * 找到文件中的“最佳”流。
+ * 根据多种算法来决定可能最符合用户期望的最佳流。
+ * 如果解码器参数为非空值，av_find_best_stream将会寻找流编码的默认解码器；
+ * 找不到解码器的流会被忽略。
+ * @param ic   媒体文件句柄
+ * @param type   流类型: 视频, 音频, 字幕, 等等(枚举类型AVMediaType)
+ * @param wanted_stream_nb  用户请求的流数量,或者自动选择为-1
+ * @param related_stream  尝试寻找一个与此相关的流(比如在同一段程序中)没有则为-1
+ * @param decoder_ret   如果为非空值,返回选中的流的解码器
+ * @param flags    标志,当前未定义
+ * @return  如果成功则返回非负的流数量；
+         如果找不到请求类型的流则返回值为AVERROR_STREAM_NOT_FOUND
+		 如果找到流但找不到对应的解码器则返回AVERROR_DECODER_NOT_FOUND
+ * @note  如果av_find_best_stream成功返回并且decoder_ret为非空值，那么
+	    *decoder_ret一定会被置为有效的AVCodec
+		
+int av_find_best_stream(AVFormatContext *ic,
+				enum AVMediaType type,
+				int wanted_stream_nb,
+				int related_stream,
+				AVCodec **decoder_ret,
+				int flags);
+
+/**				
+ * 返回流的下一帧数据(读取码流中的音频若干帧或者视频一帧)
+ * 这个函数返回保存在文件中的数据，并且不验证解码器的有效帧是什么。
+ * 函数中将存储在文件中的数据分割成多个帧，每当被调用一次则返回一帧，另外，
+ * 函数中不省略有效帧之间的无效数据，这么做是为了能够在解码器解码时提供尽可能多的信息
+ *
+ * 如果pkt->buf为非空，那么这个packet在下一次调用av_read_frame()前都是有效的，
+ * 或者直到执行avformat_close_input()前都是有效的。除此以外，这个packet是永久有效的。
+ * 在上述两种情况下，当这个packet不再有必要时，必须通过av_free_packet被释放掉。对于
+ * 视频而言，这个packet只包含一帧数据。对于音频而言，如果每一帧为已知的固定大小，
+ * 那么这个packet包含整数个帧数据(比如PCM或者ADPCM数据)。如果音频帧大小不定，那么就
+ * 只包含一帧
+ *
+ * 在AVStream中，pkt->pts, pkt->dts与pkt->duration总是被置为以时间为基准的AVStream
+ * 中正确的值(如果格式不能提供这些真值则猜测取值)。如果视频格式有B-frames，pkt->pts可能是
+ * AV_NOPTS_VALUE，因此如果不解压有效负荷，最好依赖pkt->dts
+ *
+ * @param  AVFormatContext *s为输入
+ * @param  AVPacket *pkt为输出
+ * @return  如果没问题则返回值为0，否则返回值为小于0或者文件结尾标志
+
+int av_read_frame(AVFormatContext *s, AVPacket *pkt);
+
+/**
+ * 跳转到时间戳下的关键帧.
+ * 'timestamp'对应'stream_index'.
+ *
+ * @param s 媒体文件句柄
+ * @param stream_index 如果stream_index为-1，选择一个默认码流，
+ * 		  另外，timestamp自动从AV_TIME_BASE单位转换为特定于码流的时基单位
+ * @param timestamp AVStream中时基单位时间戳，或者，没有指定流时采用AV_TIME_BASE
+		  单位
+ * @param flags 选择方向与跳转模式的标志
+ * @return 
+
+int av_seek_frame(AVFormatContext *s, int stream_index, int64_t timestamp,
+                  int flags);
+
+/**				  
+ * 打开一个输入流并且读取输入流的头。编解码器没有打开
+ * 输入流必须是用avformat_close_input()关闭的状态。
+ *  
+ * @param ps 指向用户提供的AVFormatContext的指针(由avformat_alloc_context分配内存)
+			 可能指向NULL，这种情况下，AVFormatContext由本函数分配内存并写入到ps
+			 注意，用户提供的AVFormatContext在失败时将被释放。
+ * @param url 将要打开的流的URL	
+ * @param fmt 如果为非空值，此参数强制使用特定的输入格式。 
+			  否则格式是自动检测出来的
+ * @param options 一个包含AVFormatContext和demuxer-private选项的字典。
+				  返回时，此参数将被销毁，并替换为一个包含未找到的选项的dict。可能是零
+ * @return 成功返回0，失败返回一个负值AVERROR
+ *
+ * @note 如果您想使用自定义IO，请预分配格式上下文并设置其pb字段。
+int avformat_open_input(AVFormatContext **ps, const char *url, AVInputFormat *fmt, AVDictionary **options)
+
+/**
+ * 读取媒体文件的数据包以获取流信息。这样
+ * 对于没有头的文件格式(如MPEG)非常有用。在MPEG-2重复帧模式下
+ * 这个函数还计算实际帧速率。
+ * 这个函数不会改变逻辑文件的位置；
+ * 已经检查的包可能会被缓冲用于后续处理。
+ *
+ * @param ic 媒体文件句柄
+ * @param options  如果为非空值，则是一个长度为ic.nb_streams
+ *                 (AVFormatContext.streams中的元素数量)的指向字典的数组指针，
+ * 				   其中第i个成员包含与第i个流对应的编解码器选项
+ * 				   返回时，每个字典将填充未找到的选项
+ * @return 正确时返回值>=0，错误时返回AVERROR_xxx
+ *
+ * @note 这个函数不能保证打开所有的编解码器,因此
+ *       返回时options不为空是一种完全正常的行为。
+ *
+ * @todo 让用户以某种方式决定需要什么信息，这样
+ *       我们就不会浪费时间获取用户不需要的东西。
+ *
+ * @detail avformat_open_input函数会读文件头，对mp4文件而言，
+ *         它会解析所有的box。但它知识把读到的结果保存在对应的数据结构下。
+ *         这个时候，AVStream中的很多字段都是空白的。 
+ *         avformat_find_stream_info则检测这些重要字段，如果是空白的，就设法填充它们。
+ *         因为我们解析文件头的时候，已经掌握了大量的信息，avformat_find_stream_info就是
+ *         通过这些信息来填充自己的成员，当重要的成员都填充完毕后，该函数就返回了。
+ *         这中情况下，该函数效率很高。但对于某些文件，单纯的从文件头中获取信息是不够的，
+ *         比如vidoe的pix_fmt是需要调用h264_decode_frame才可以获取其pix_fmt的。因此，
+ *         这个时候这个函数就会读一些数据进来，然后分析这些数据，并尝试解码这些数据，
+ *         最终从中提取到所需要的信息。在所有的信息都已经获取到以后，
+ *         avformat_find_stream_info函数会计算start_time，波特率等信息
+ */
+int avformat_find_stream_info(AVFormatContext *ic, AVDictionary **options)
+
+/**
+ *
+ * 查找具有匹配编解码器ID的已注册解码器
+ *
+ * @param id 请求的解码器的AVCodecID
+ * @return 如果找到解码器则返回值为解码器，否则为空值.
+ */
+AVCodec *avcodec_find_decoder(enum AVCodecID id);
+
+ * 使用AVCodec初始化AVCodecContext。 
+ * 在使用这个函数之前，必须使用avcodec alloc context3()来分配上下文.
+ *
+ * avcodec_find_decoder_by_name(), avcodec_find_encoder_by_name(),
+ * avcodec_find_decoder() 与 avcodec_find_encoder() 提供一个简单的方式
+ * 检索编解码器.
+ *
+ * @warning 这个函数不是线程安全的!
+ *
+ * @code
+ * avcodec_register_all();
+ * av_dict_set(&opts, "b", "2.5M", 0);
+ * codec = avcodec_find_decoder(AV_CODEC_ID_H264);
+ * if (!codec)
+ *     exit(1);
+ *
+ * context = avcodec_alloc_context3(codec);
+ *
+ * if (avcodec_open2(context, codec, opts) < 0)
+ *     exit(1);
+ * @endcode
+ *
+ * @param avctx 需要初始化的上下文
+ *
+ * @param codec 用来打开上下文的编解码器。如果一个非空的编解码器传递给avcodec_alloc_context3()或者
+ *              avcodec_get_context_defaults3()来获取这个上下文，那么这个参数必须
+ *              必须是NULL或等于先前传递的编解码器。
+ * @param options 一个以AVCodecContext与codec-private选项填充的字典
+ *                返回时，此对象将填充未找到的选项
+ *
+ * @return 成功返回值为0，错误返回值为负值
+ * @see 相关的方法为avcodec_alloc_context3(), avcodec_find_decoder(), avcodec_find_encoder(),
+ *      av_dict_set(), av_opt_find()。
+ */
+int avcodec_open2(AVCodecContext *avctx, const AVCodec *codec, AVDictionary **options);
+
+/**
+ * 分配一个AVFrame内存空间并设置这段内存为默认值。
+ * 必须使用av_frame_free()释放生成的结构
+ *
+ * @return 返回一个填充为默认值的AVFrame，或者失败时返回空值。
+ *
+ * @note 注意这个方法这只分配AVFrame本身，而不是数据缓冲区。那些数据缓冲区
+ *       必须使用其他的方式分配内存，比如，使用av_frame_get_buffer()或手动分配
+ */
+AVFrame *av_frame_alloc(void);
+
+/**
+ * 如果以给定图片格式存储，则计算给定宽度和高度的图片将占用的字节大小。
+ *
+ * @param pix_fmt    图片的像素格式
+ * @param width      图片宽度
+ * @param height     图片高度
+ * @return 返回值为计算的图像缓冲区大小或错误情况下的负值错误代码
+ *
+ * @see 相关请看av_image_get_buffer_size()。
+ */
+int avpicture_get_size(enum AVPixelFormat pix_fmt, int width, int height);
+
+/**
+ * Setup the picture fields based on the specified image parameters
+ * and the provided image data buffer.
+ *
+ * The picture fields are filled in by using the image data buffer
+ * pointed to by ptr.
+ *
+ * If ptr is NULL, the function will fill only the picture linesize
+ * array and return the required size for the image buffer.
+ *
+ * To allocate an image buffer and fill the picture data in one call,
+ * use avpicture_alloc().
+ *
+ * @param picture       the picture to be filled in
+ * @param ptr           buffer where the image data is stored, or NULL
+ * @param pix_fmt       the pixel format of the image
+ * @param width         the width of the image in pixels
+ * @param height        the height of the image in pixels
+ * @return the size in bytes required for src, a negative error code
+ * in case of failure
+ *
+ * @see av_image_fill_arrays()
+ */
+int avpicture_fill(AVPicture *picture, const uint8_t *ptr,
+                   enum AVPixelFormat pix_fmt, int width, int height);

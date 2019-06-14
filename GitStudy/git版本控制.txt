@@ -1,0 +1,22 @@
+1、撤销文件修改（git checkout）
+	（1）使用git log命令查看提交记录日志，可以根据提交日志选择需要回退到哪个版本，
+		 每次提交的日志信息结构为：
+								+commit 版本唯一标识号
+								+Author: 提交用户名 提交用户邮箱
+								+Data：提交日期
+									   提交描述信息
+		 每个标识号都是唯一的，可以在checkout时使用，标识回退到某个版本；
+	 （2）使用git checkout 版本号 需要回退的文件名，如：git checkout 130ff4993da69e2 Test.txt，
+	
+2、撤销提交（git reset）：	
+2.1、如果需要撤销当前的提交，同时不改变本地文件，撤销提交后只回退了commit的信息：
+	（1）使用git log 查询提交日志找到当前提交的上一次提交记录的版本id号
+	（2）git reset --soft 当前提交的上一次提交的版本id号
+		比如：git reset --soft cb9fc05156bb61e1f946562dda0657c9bc505d38
+2.2、如果需要撤销当前的提交，同时本地实际文件更新到上一次提交的状态
+	（1）使用git log 查询提交日志找到当前提交的上一次提交记录的版本id号
+	（2）git reset --hard 当前提交的上一次提交的版本id号
+		比如：git reset --hard cb9fc05156bb61e1f946562dda0657c9bc505d38
+		
+
+		

@@ -1,0 +1,117 @@
+1. C++ 11
+    ...不会
+
+2. UML类的关系
+    继承(泛化), 实现, 关联, 依赖, 组合, 聚合
+
+3. 组合和聚合的区别
+    组合是一种强聚合的关系,  比如人有一个大脑, 是contain-a的关系,
+    聚合的关系相对松散, 比如人有一台电脑, 是has-a的关系.
+    C++代码实现上的区别, 组合一般用成员对象实例, 生命周期和对象本身是一致的.
+    而聚合一般用成员对象指针来表示, 生命周期并不一致.
+
+    class computer
+    class brain
+
+    class Human {
+     private:
+        brain b;        /* 组合 */
+        computer *p;    /* 聚合 */
+    };
+
+4. 项目中用到的设计模式
+    单例, 工厂, 观察者...
+
+5. 单例模式的注意点
+    1). 内存释放的问题, 显示的提供ReleaseInstance接口,
+        或者设计使用垃圾回收机制(GC). 即定义一个静态的GC 对象,
+        并在该GC对象析构函数中销毁该单例对象.
+        在main函数退出后, 会销毁该GC静态对象, 并销毁单例对象.
+        具体可参考Benisont项目中的CScreenManager类. (screenmanager.h)
+
+    2). 懒汉式, 比较懒, 只有当第一次调用getInstance接口时才分配内存.
+    class SingleTone {
+     private:
+        static SingleTone *instance = NULL;         // 静态私有对象,但未分配内存.        
+     public:
+        static SingleTone *GetInstance() {
+            if (instance == NULL) {
+                instance = new SingleTone();
+            }
+            return instance;
+        }
+    };
+        饿汉式, 比较饥饿, 程序起来(类加载)时就实例化了instance对象. 
+    class SingleTone {
+     private:
+        static SingleTone *instance = new SingleTone();         // 静态私有对象, 进程起来/类加载时就分配内存了.
+     public:
+        static SingleTone *GetInstance() {
+            return instance;
+        }
+    }
+
+    3). 所以对于懒汉式的单例模式, 需要注意线程安全, 即可重入性问题.需要用mutex或其他同步/原子机制进行保护.
+    #include <mutex>
+    using namespace std;
+
+    class SingleTone {
+     private:
+        static SingleTone *instance = NULL;
+        mutex mtx;
+     public:
+        static SingleTone *GetInstance() {
+            if (instance == NULL) {
+               mtx.lock(); 
+               if (instance == NULL) {
+                    instance = new SingleTone();
+               }
+               mtx.unlock();
+            }
+
+            return instance;
+        }
+    }
+
+    饿汉式单例模式没有线程安全的问题, 所以是更简单便捷的...
+    
+
+6. 父类, 子类, 其中子类中有个其他类的对象实例, 现在实例化一个子类, 请问这三个类的构造函数调用顺序?
+    例如 
+    class Member {};
+    class Base {}; 
+    class Child : public Base {
+     private:
+        Member m;
+    };
+
+    int main() {
+        Child chd;
+    }
+
+    进过测试... 顺序是先基类Base构造, 再成员变量Member的构造函数, 最后是子类Child的构造函数...
+
+7. Linux IPC 
+    pipe(匿名管道) 
+    fifo(命名管道)
+    message queue(消息队列)
+    shared memory(共享内存)
+    signal(信号)
+    semaphore(信号量)
+    socket(套接字)
+
+8. 条件变量
+    pthread_cond_wait
+    pthread_cond_signal
+
+9. 互斥量
+    mutex
+
+10. 一个子类继承父类,  请问父类的析构函数需要注意什么?
+   父类的析构函数最好申明为虚函数...
+   假设利用6.的代码进行实例化,
+   Base *b = new Child();
+
+   delete b;    /* 如果Base的析构函数不定义为虚函数, 该语句只会调用Base类的析构函数,  而不会调用Child的析构函数... */
+
+   *析构函数是一个特殊函数, 析构函数的名字统一为destructor, 所以加virtual关键字可以构成多态.

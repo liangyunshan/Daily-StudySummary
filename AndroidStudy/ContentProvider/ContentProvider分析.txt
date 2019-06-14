@@ -1,0 +1,64 @@
+ConentProvider中数据访问要素:
+	数据访问URI，URI为如下格式字符串：
+		<prefix>://<authority>/<data_type>/<id>
+		
+		perfix			前缀，一般为content://
+		authority		授权，用于指定内容提供者的名称，
+						具体值为<provider>标签中的android:authority属性值
+		data_type		数据类型，表明内容提供者的数据类型
+		id				具体数据ID号，指定特定的请求记录
+		content://me.pengtao.contentprovidertest/test
+
+ContentProvider子类实现：
+	继承ContentProvider类，重新实现4个核心方法与2个其他方法
+	
+	4个核心方法：
+	  public Uri insert(Uri uri, ContentValues values) 
+	  // 外部进程向 ContentProvider 中添加数据
+
+	  public int delete(Uri uri, String selection, String[] selectionArgs) 
+	  // 外部进程 删除 ContentProvider 中的数据
+
+	  public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs)
+	  // 外部进程更新 ContentProvider 中的数据
+
+	  public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,  String sortOrder)　 
+	  // 外部应用 获取 ContentProvider 中的数据
+
+	  ps：
+	  1. 上述4个方法由外部进程回调，并运行在ContentProvider进程的Binder线程池中（不是主线程）
+	  2. 存在多线程并发访问，需要实现线程同步
+		a. 若ContentProvider的数据存储方式是使用SQLite，则不需要，
+		   因为SQLite内部实现好了线程同步，若是多个SQLite则需要，因为SQL对象之间无法进行线程同步
+		b. 若ContentProvider的数据存储方式是内存，则需要自己实现线程同步
+
+	2个其他方法：
+	public boolean onCreate() 
+	// ContentProvider创建后 或 打开系统后其它进程第一次访问该ContentProvider时 由系统进行调用
+	// ps：运行在ContentProvider进程的主线程，故不能做耗时操作
+
+	public String getType(Uri uri)
+	// 得到数据类型，即返回当前 Url 所代表数据的MIME类型
+
+ContentProvider组件具体使用：
+	1.实现ContentProvider子类；
+	2.使用<provider.../>标签在 AndroidManifest.xml中的<activity.../>标签内注册内容提供者；
+		<provider android:name="StudentsProvider1"
+			android:authorities="com.example.provider.College" >
+		</provider>
+		
+		ps:其中需要注意权限问题。
+		
+		ps:
+			1.<provider>标签的android:authority属性值为URI的authority部分
+			2.如果标签中声明android:readPermission,则其他应用读取数据需要预先获取该权限信息
+			3.如果标签中声明android:writePermission,则其他应用写入数据需要预先获取该权限
+			4.其他应用中通过uses-permission标签获取需要的读权限和(或)写权限
+			5.android:name属性值为具体的ContentProvider子类实现的包路径
+	
+	3.使用ContentResolver实例的接口访问ContentProvider中的数据
+		在Activity当中通过getContentResolver()可以得到当前应用的 ContentResolver实例(ContentResolver
+		一般不需要自定义实现)，ContentResolver中的接口是与ContentProvider中一一对应的。
+		其他应用中，使用content provider中指定的URI，通过getContentResolver获取ContentResolver实例，
+		通过ContentResolver的接口访问content provider中的数据。
+		

@@ -1,0 +1,29 @@
+	(1) SQLiteOpenHelper类:
+	android中提供SQLiteOpenHelper类帮助管理数据库，其中包括创建数据库和更新数据库，
+开发中继承SQLiteOpenHelper类实现数据库管理。
+	
+	SQLiteOpenHelper类中提供有两个抽象接口需要子类实现：
+		abstract void onCreate(SQLiteDatabase db)
+		ps:
+			1、当数据库第一次创建时被调用
+			2、正常实现内容为创建数据库表
+		
+		abstract void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
+		ps:
+			当数据库升级时被调用
+		
+	(2) SQLiteDatabase类：
+	
+
+	sql相关知识：
+		SQLite中通过ALTER TABLE命令重命名表或者在表中添加新列
+		重命名：
+			ALTER TABLE students RENAME TO new_students
+			ps:
+				将命名为students的表重命名为new_students
+		
+		添加新的列：
+			ALTER TABLE students ADD COLUMN SEX char(1)
+			ps:
+				在表students中新增列SEX，类型为1个char字符
+				

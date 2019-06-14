@@ -1,0 +1,54 @@
+绝对布局AbsoluteLayout
+	通过坐标和宽高来控制控件的位置（基本已经弃用）
+
+线性布局LinearLayout
+	类似于Qt中的水平布局与垂直布局；
+	基本属性：
+		orientation:布局中组件的排列方式
+		gravity:内含子元素的对齐方式，可使用或运算符组合
+		layout_gravity:在父控件中的对齐方式
+		layout_width:布局宽度
+		layout_height:布局高度
+		id:唯一属性值
+		background:背景图片/背景颜色
+		layout_weight:内部布局比例
+
+相对布局RelativeLayout
+	基本属性：
+		根据父容器定位布局：
+			layout_alignParentLeft：与父容器左边界对齐
+			layout_alignParentRight：与父容器右边界对齐
+			layout_alignParentTop：与父容器顶部边界对齐
+			layout_alignParentBottom：与父容器底部边界对齐
+			layout_centerHorizonal：在父容器水平中部
+			layout_centerVertical：在父容器垂直中部
+			layout_centerInParent：在父容器正中心
+		根据兄弟组件定位布局：
+			layout_toLeftOf:兄弟组件的左边
+			layout_toRightOf:兄弟组件的右边
+			layout_above:兄弟组件的上方
+			layout_below:兄弟组件下方
+			layout_alignTop:对齐兄弟组件的顶部边界
+			layout_alignBottom:对齐兄弟组件的底部边界
+			layout_alignLeft:对齐兄弟组件的左边界
+			layout_alignRight:对齐兄弟组件的右边界
+		组件定位偏移：
+			layout_margin:上下左右偏移
+			layout_marginLeft:左偏移
+			layout_marginRight:右偏移
+			layout_marginTop:上偏移
+			layout_marginBottom:下偏移
+		组件填充：
+			padding:上下左右填充边距
+			paddingLeft:左部填充边距
+			paddingRight:右部填充边距
+			paddingTop:顶部填充边距
+			paddingBottom:底部填充边距			
+		
+
+帧布局FramseLayout
+
+表格布局TableLayout
+
+
+"http://m.kugou.com/app/i/getSongInfo.php?cmd=playInfo&hash=8C743A283935FF2C1EB62A8FA855DB60"
