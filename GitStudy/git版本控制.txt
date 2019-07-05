@@ -26,3 +26,11 @@
 	 首先执行git checkout --detach
 	 执行该命令后显示* （头指针分离于 [指定的commi ID]）
 	 可以用于删除本地分支，即执行完git checkout --detach后执行git branch -d [本地分支名]
+	 
+4、希望查看仓库中最近的修改变动情况
+	（1）git log查看最近的提交记录，根据commit message可以了解一部分修改变动情况
+	     ps:
+			按方向键可以查看更多的提交记录
+			
+	（2）git show [commit ID] [file name]查看[某次提交] [某个文件]的变动情况，默认显示仓库中
+	最新一次提交的变动情况
