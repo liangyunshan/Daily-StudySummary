@@ -1,0 +1,167 @@
+1.代码块控制
+  概述：
+	Python中不使用{}来控制类、函数、其他逻辑判断，而是使用缩进来写模块
+  说明：
+	如果是处于同一个代码块中，要求缩进的空白数量相同；
+	在紧邻着一个代码块下方的的独立语句，要求头部没有空白缩进，否则提示：
+		IndentationError: unindent does not match any outer indentation level
+	意思是存在缩进错误，当前语句的缩进排版与外部的任何缩进级别不匹配
+	
+	ps:空行是程序代码的一部分，但不是Python语法的一部分，Python不对空行进行处理。
+
+2.数据类型
+  Python中包含五种数据类型：Numbers(数字)、String(字符串)、List(列表)、Tuple(元组)、
+  Dictionary(字典)。
+	(1)String数据：
+		取值顺序包括：从左到右取值与从右到左取值，下标从0开始，包括正数与负数，允许混用；
+		取值方式为：[头下标:尾下标]，截取到的字符串包括头下标字符但不包括尾下标字符；
+		下标为空表示取到头或尾；
+		如：
+		str = 'liang'
+		str[1:5]	->结果为iang
+		str[-1:-5]	->结果为lian
+		str[1:-1]	->结果为ian			//这种混合方式待确认情况
+		
+		ps:
+		下标
+		从左向右： 0  1  2  3  4
+		从右向左：-5 -4 -3 -2 -1
+		数据：     l  i  a  n  g
+	(2)List数据：
+		列表通过[]聚合字符、数字、字符串、列表数据，用,隔开，属于通用复合数据类型
+		取值同String字符串类型数据
+		
+	(3)Tuple数据：
+		元组类似于列表，但不能二次赋值，即相当于只读列表；
+		用()聚合数据，用逗号,隔开；
+		
+		取值同列表与字符串；
+		
+		不允许修改或删除元组中数据(只针对根元素)，如果元组中元素根元素为列表，则列表
+		中元素(次级元素，非根元素)可以被修改
+		
+	(4)Dictionary数据：
+		字典中元素是无序的，以键值对(key-value)的形式存在，通过键存取值；
+		用{}聚合数据，用逗号,隔开，键可以是字符串或者数字；
+		字典内置方法：
+			dict.get(key, default=none)	//返回指定key对应的value，如果没有则返回default值
+			
+			dict.keys()	//以列表形式返回字典中的所有键
+			
+			dict.items() //以列表形式返回字典中的全部键值对，键值对以元组形式存在
+		
+3.运算符
+    (1)成员运算符
+		in	判断在右值序列中是否找到左值，返回值为True或者False
+		not in	判断在右值序列中是否没有左值，返回值为True或者False
+		
+	(2)身份运算符
+		is	判断两个标识符是否引用自一个对象，类似于 == 运算符，返回值为True或者False
+		is not	判断两个标识符是否引用自不同对象，类似于 != 运算符，返回值为True或者False
+	
+		ps:
+			is类似于==，is not类似于!=，但是不等同，is是判断两个变量是否为同一个或者
+			说是否是同一块内存
+		举例如下：
+			a = [1, 2, 3]
+			
+			b = a			
+			b is a 	----->True			
+			b == a	----->True
+			
+			b = a[:]			//a为List型数据，[]操作符取值会开辟一段新内存
+			b is a	----->False			
+			b == a	----->True
+		
+		
+4、条件、循环语句
+	(1)for循环中除了可以使用break与continue外，还可以使用else语句
+		else语句只有在循环正常执行结束后才执行，如果中途跳出则不执行else语句
+		
+		break语句用于跳出整个循环
+		
+		continue语句用于结束本次循环并进入下一次循环
+
+5、推导式
+	从一个数据序列构建另一个数据序列，包括：列表推导式、字典推导式、集合推导式
+	(1)列表(list)推导式:
+		ret_list = [<value_exp> <for value in value_range> <value_condition>]
+		<value_exp> 值(value)参与的表达式或函数
+		<for value in value_range> 从取值范围(value_range)中迭代取值(value)
+		<value_condition> 取值判断条件，可省略
+		
+		举个栗子：
+			ret_list = [x*x for x in range(10) if x%2 == 0]
+			print ret_list
+			>>>[0, 4, 16, 36, 64]			
+			
+	(2)字典(dict)推导式
+		ret_dict = {<key_value_exp> <for key in key_range> <key_condition>}
+		<key_value_exp> 字典生成键值对表达式，即key:value
+		<for key in key_range> 从取键范围(key_range)中迭代取字典键(key)
+		<key_condition> 字典取键判断条件，可省略
+		
+		举个栗子：
+			mcase = {'a': 10, 'b': 34, 'A': 7, 'Z': 3}
+			mcase_frequency = {
+				k.lower(): mcase.get(k.lower(), 0) + mcase.get(k.upper(), 0)
+				for k in mcase.keys()
+				if k.lower() in ['a','b']
+			}
+			print mcase_frequency
+			>>>{'a': 17, 'b': 34}
+			ps：将字典mcase中所有key的小写为'a'或'b'的键值对取出来，
+				key小写为'a'的值相加作为结果字典的键'a'的值
+				key小写为'b'的值相加作为结果字典的键'b'的值
+				即大小写key合并
+	(3)集合(set)推导式	
+		ret_set = {<value_exp> <for value in value_range> <value_condition>}
+		
+		举个栗子：
+			squared = {x**2 for x in [1, 1, 2]}
+			print(squared)
+			>>>set([1, 4])
+
+6、generator生成器
+	列表推导式中[]换成()可得到生成器
+	
+		
+7、函数
+	(1)函数定义
+		使用def标识，后接函数名称与圆括号()，圆括号中定义参数；
+		
+		圆括号后紧跟冒号:，函数内容以冒号起始，函数体使用相同缩进；
+		
+		函数体第一行可以选择性使用文档字符串，用来存放函数说明
+	(2)函数参数
+		函数声明时，参数称为形参，调用函数时带入参数为实参；
+		当使用不可变数据作为函数参数时，函数内部改变参数不影响外部变量；
+		当使用可变数据结构作为函数参数时，函数内部改变参数后，外部变量的值也变化；
+		
+		举个栗子说明：
+		例1、
+		def testFunc(t_name)
+			t_name = 'Mr. Gumby'	//函数中对参数重新赋值
+		
+		name = 'Mrs. Entity'
+		testFunc(name)	//name为实参调用函数
+		print name	//name值不变
+		>>>'Mrs. Entity'
+		
+		例2、
+		def testFunc(t_name)
+			t_name[0] = 'Mr. Gumby'		//函数中修改数据结构中第一个值
+		
+		names = ['Mr. Entity', 'Mr. Thing']
+		testFunc(names)		//将list数据作为参数调用函数
+		print names		//list值被修改
+		>>>['Mr. Gumby', 'Mr. Thing']
+		
+		ps:将可变数据结构作为参数调用函数，相当于形参引用与实参同一个值
+		ps:如果不希望这样，应该对实参进行复制，将复制体传给形参 比如t_name = names[:],因
+		   为[]操作符取值会开辟一段新内存
+		
+		
+		
+		
+			

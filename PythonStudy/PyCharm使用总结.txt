@@ -1,0 +1,15 @@
+一.编码方式
+	1. python中编码方式涉及两个部分：文件编码与源码编码，具体如下：
+	   (1)在pycharm中编写代码，用到中文时如果文件的编码方式与源码的不一样，会出现乱码问题；
+	   
+	   (2)由于python2中默认不支持中文（python3已经默认支持中文），注释与代码中都是这样,如果不声明
+	      编码方式，会提示错误：SyntaxError: Non-ASCII character...；
+	   
+	   基于以上两种情况，为了解决问题，要求以# -*- coding: <encoding name> -*-格式在
+	   文件开头声明源码编码格式，如：# -*- coding: UTF-8 -*-
+	   
+	   pycharm中文件编码方式设置方法为：file(文件)-setting(设置)-Editor(编辑器)-File Encodings(文件编码)
+	   
+二.使用第三方库   
+	   
+	
