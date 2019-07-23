@@ -157,9 +157,46 @@
 		print names		//list值被修改
 		>>>['Mr. Gumby', 'Mr. Thing']
 		
-		ps:将可变数据结构作为参数调用函数，相当于形参引用与实参同一个值
+		ps:将可变数据结构作为参数调用函数，相当于形参引用实参的引用值
+		ps:python中所有赋值实际应该叫做引用，即为一个值给定一个命名
 		ps:如果不希望这样，应该对实参进行复制，将复制体传给形参 比如t_name = names[:],因
 		   为[]操作符取值会开辟一段新内存
+		
+	(3)关键字参数：
+		调用函数时提供参数的名字，即通过使用参数名提供参数，这种方式允许乱序带入参数；
+		举个栗子：
+			//打印一个人名，last_name代表姓，first_name表示名
+			def showName(last_name, first_name):
+				'print Name last_name+first_name'
+				print(last_name + first_name)
+			
+			//下面两种形式都是一样的结果
+			showName(first_name='YunShan', last_name='Liang')
+			showName(last_name='Liang', first_name='YunShan')
+			>>>LiangYunShan
+	(4)不定参数(收集多参数)
+		函数定义时不确定参数的数量，或者函数有很多类似形参懒得写，那么就可以在形参
+		名称之前加上星号*，表示收集其余位置上的参数并集合到一个元组中。
+		举个栗子：
+			def multi_paras(roomNum, *classmates):
+				'multi parameters example'
+				print roomNum+':', classmates
+				
+			multi_paras('101', 'Lys', 'Xjh', 'Lwy')
+			>>>101: ('Lys', 'Xjh', 'Lwy')
+			multi_paras('102', 'Xsl', 'Yyh')
+			>>>102: ('Xsl', 'Yyh')
+	
+	(5)函数帮助说明
+		函数第一行可以选择性的书写字符串，可以描述函数的使用说明等信息，作为函数的帮
+		助文档；
+		
+		查看函数的帮助说明，可以通过访问函数的属性__doc__，也可以通过内建函数help函数
+		举个栗子，查看math库中的sqr函数的帮助说明：
+		print(math.sqrt.__doc__)
+		或者
+		help(math.sqrt)
+		
 		
 		
 		

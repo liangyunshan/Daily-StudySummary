@@ -250,4 +250,75 @@
 		Factory *factory2 = new Factory2();
 		ProductA *productA2 = factory2->CreateProductA();
 		ProductB *productB2 = factory2->CreateProductB();
+┌──────────┐
+│可变参数：│
+└──────────┘
+	C/C++中可变参数的实现需要包含stdarg.h，stdarg中提供了可变参数的相关宏定义。
+	具体实现例子如下：
+		例1：
+		void variable(int i, ...)
+		{
+			int j = 0;
+			va_list arg_ptr;	//定义一个可变参数列表指针
+			va_start(arg_ptr, i);	//控制可变参数列表指针指针指向函数中最后一个固定参数
+
+			while( j != -1 )
+			{
+				j = va_arg(arg_ptr, int);	//返回参数列表中下一个int型的值
+				printf("%d ",j );
+			}
+			va_end(arg_ptr);	//清空参数列表，收回内存
+		}
+		
+		例2：
+		int sum(int num_args, ...)
+		{
+		   int val = 0;
+		   va_list ap;
+		   int i;
+
+		   va_start(ap, num_args);
+		   for(i = 0; i < num_args; i++) 
+		   {
+			  val += va_arg(ap, int);
+		   }
+		   va_end(ap);
+		 
+		   return val;
+		}
 	
+	其中使用以下几个宏定义：
+		va_list:
+			可以定义一个指针，用于指向可变参数列表
+		va_start(va_list arg_ptr, last_arg):
+			初始化va_list定义的指针，控制可变参数列表指针指向最后一个固定参数last_arg，
+			最后一个固定参数即省略号的前一个参数
+		va_arg(va_list arg_ptr, type):
+			检索可变参数列表指针指向的下一个类型为type的参数，并返回检索值
+		va_end(va_list arg_ptr):
+			清空被va_start初始化的可变参数列表指针，收回分配的内存等，最终允许
+			函数正常返回，如果在函数返回前未调用va_end，结果为未定义
+	
+	ps:
+		C++中由于多态性的存在，部分情况下允许函数重载来处理可变参数的问题，但C中没有重载，
+	可以通过以上方式处理这种问题。
+	ps:
+		由于va_arg检索可变参数列表时，无法判断检索到的参数是否为最后一个参数，所以一般情况下
+	会预先设定参数列表尾部标志(例1)或者最后一个固定参数设定为可变参数个数(例2)等等，通过这样
+	的方法来帮助确定可变参数列表结束标志。
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
