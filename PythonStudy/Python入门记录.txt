@@ -178,6 +178,7 @@
 		函数定义时不确定参数的数量，或者函数有很多类似形参懒得写，那么就可以在形参
 		名称之前加上星号*，表示收集其余位置上的参数并集合到一个元组中。
 		举个栗子：
+			普通参数收集使用：
 			def multi_paras(roomNum, *classmates):
 				'multi parameters example'
 				print roomNum+':', classmates
@@ -186,6 +187,49 @@
 			>>>101: ('Lys', 'Xjh', 'Lwy')
 			multi_paras('102', 'Xsl', 'Yyh')
 			>>>102: ('Xsl', 'Yyh')
+			ps:
+				普通参数收集函数中，参数名前增加一个星号*；
+				普通参数收集函数中，多个参数被收集后整合为元组；
+			
+			关键字参数收集：
+			def keyword_multi_paras(rommNum, **classmates):
+				'keyword_multi_paras'
+				print rommNum+':',classmates
+			
+			keyword_multi_paras('11', R1101='Hr', R1102='Test', R1103='Develop')
+			>>>11: {'R1101': 'Hr', 'R1103': 'Develop', 'R1102': 'Test'}
+			ps:
+				关键字参数收集函数中，参数名前增加两个星号*
+				关键字参数收集函数中，带入多参数时，key只能是字母或下划线开头非字符串，
+				value只能是数字、字母或数字开头的字符串，关键字参数被收集后，key转变为
+				字符串，多个参数以key-value形式保存为字典；
+				
+		(5)参数分散
+			参数分散是参数收集的反向过程，同样由*与**参与完成。
+			函数定义中使用*与**是参数收集过程，函数调用中使用*与**是参数分散过程；
+			函数定义中*收集参数为元组，**收集参数为字典；
+			函数调用总*分散元组为多个参数，**分散字典为多个参数；
+			
+			举个栗子：
+				def single_star(*classMates):	//*收集多参数为元组
+					print classMates
+
+				t_tuple = ('Lys', 'Xjh', 'Lwy')
+				single_star(*t_tuple)			//*分散元组为多参数
+				>>>('Lys', 'Xjh', 'Lwy')
+
+				single_star('Lys', 'Xjh', 'Lwy')	//带入多个普通参数
+				>>>('Lys', 'Xjh', 'Lwy')
+
+				def double_star(**classMates):	//**收集多参数为字典
+					print classMates
+
+				t_dict = {'Lys':'M', 'Xh':'W'}
+				double_star(**t_dict)			//**将字典分散为多个参数
+				>>>{'Xh': 'W', 'Lys': 'M'}
+
+				double_star(Lys='M', Xh='W')	//带入多个关键字参数
+				>>>{'Xh': 'W', 'Lys': 'M'}
 	
 	(5)函数帮助说明
 		函数第一行可以选择性的书写字符串，可以描述函数的使用说明等信息，作为函数的帮
