@@ -1,0 +1,11 @@
+一、函数
+	1.repr(p_object)函数
+		参数为Python中的对象，返回值为String类型字符串；
+		Python中一般用于将对象转换为可供解释器读取的字符串；
+	
+	2.hasattr(p_object, name)函数
+		检查p_object是否有name属性或者name方法，返回True或者False，通常使用与类中；
+		参数name使用引号包含；
+	
+	
+二、包

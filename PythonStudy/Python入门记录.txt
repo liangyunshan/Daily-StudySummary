@@ -60,8 +60,12 @@
 		is not	判断两个标识符是否引用自不同对象，类似于 != 运算符，返回值为True或者False
 	
 		ps:
-			is类似于==，is not类似于!=，但是不等同，is是判断两个变量是否为同一个或者
-			说是否是同一块内存
+			首先Python中的对象包含基本三要素：身份标识(id)、type(类型)、value(值)
+			对象的身份标识可以通过内置函数id()来获取，类型可以通过type()来获取
+			is类似于==，is not类似于!=，但是不等同;
+			is是判断两个变量的身份标识(id)是否相同
+			==是判断两个变量的值(value)是否相同
+			
 		举例如下：
 			a = [1, 2, 3]
 			
@@ -72,6 +76,10 @@
 			b = a[:]			//a为List型数据，[]操作符取值会开辟一段新内存
 			b is a	----->False			
 			b == a	----->True
+		总结如下：
+			当对象是数值或者字符串时，只要值相同，is就会判断为true，其他数据类型只取决于id;
+			当对象为别名关系时，is会判断为true;
+			
 		
 		
 4、条件、循环语句
@@ -225,7 +233,7 @@
 					print classMates
 
 				t_dict = {'Lys':'M', 'Xh':'W'}
-				double_star(**t_dict)			//**将字典分散为多个参数
+				double_star(**t_dict)			//**将字典分散为多个参数，参数的key必须是字符串
 				>>>{'Xh': 'W', 'Lys': 'M'}
 
 				double_star(Lys='M', Xh='W')	//带入多个关键字参数
@@ -240,7 +248,71 @@
 		print(math.sqrt.__doc__)
 		或者
 		help(math.sqrt)
+	
+8、变量作用域
+	作用域分为全局作用域与局部作用域，也可以成为命名空间。每个函数调用时，都会创建一个新的
+	局部作用域。
+	由于Python中所有变量是指为内存中一个值绑定一个名称，全局作用域中
+	
+9、多态、封装、继承与类
+	示例代码如下：
+	class Widget:
+		width = 0
+		height = 0
+		def size(self):
+			return {'width':self.width, 'height':self.height}
+
+		def resize(self, w_value, h_value):
+			self.width = w_value
+			self.height = h_value
+
+	MainWidget = Widget()
+	MainWidget.resize(100, 50)
+	print MainWidget.size()
+	
+	封装性：
+		(1)其中比较重要的一个标志就是，类内部的属性需要保证不能被外部直接访问，即私有化，
+			类似于C++中private标志；
+		(2)私有化实现需要依靠在属性前增加双下划线；
+		(3)增加双下划线后的属性会被翻译成前面加单下划线和类名的形式（内部访问时也需要使用增加
+		   了双下划线的属性名字）；
+		(4)如示例中的类Widget的两个属性width和height，如果在命名的时候加上双下划线"__",
+			则无法直接访问__width与__height；
+		(5)但是根据第(3)条中的解释，可以直接访问_Widget__width与_Widget__height来
+		   实现访问__width与__height，即在私有化的属性前加上_Widget（下划线+类名）；
 		
+	ps:
+		通过类名调用的是函数，通过类对象调用的是方法，函数需要手动传入self，方法不需要传self
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		
 		
 		
