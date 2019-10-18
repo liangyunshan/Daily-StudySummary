@@ -1,0 +1,32 @@
+1、shell脚本根据解释器不同可以分为：
+	Bourne Shell（/usr/bin/sh或/bin/sh）
+	Bourne Again Shell（/bin/bash）
+	C Shell（/usr/bin/csh）
+	K Shell（/usr/bin/ksh）
+	Shell for Root（/sbin/sh）
+	(1)如果希望直接执行脚本，脚本开头部分需要声明解释器位置（如：#!/bin/bash）
+	
+	(2)如果选择指定解释器执行脚本，则不用再脚本中声明解释器（写了也没用）
+	
+	ps: #! 是一个约定的标记，它告诉系统这个脚本需要什么解释器来执行，即使用哪一种 Shell。
+	ps: 原始的shell脚本文件没有可执行权限，使用chmod +x [脚本路径]
+2、执行shell脚本传递参数
+	(1)具有可执行权限的shell脚本执行时，允许带执行参数；
+	
+	(2)shell脚本中可以使用“$数字”形式使用参数，$0表示第0个参数即脚本文件名，$1表示第1个参数，依次类推；
+	   ps:在函数中使用则获取到的是函数代入的参数，否则是脚本代入的参数;
+	
+	(3)使用“$#”获取除了脚本本身执行参数的个数
+	
+3、文件表达式
+		-e filename 如果 filename存在，则为真
+		-d filename 如果 filename为目录，则为真 
+		-f filename 如果 filename为常规文件，则为真
+		-L filename 如果 filename为符号链接，则为真
+		-r filename 如果 filename可读，则为真 
+		-w filename 如果 filename可写，则为真 
+		-x filename 如果 filename可执行，则为真
+		-s filename 如果文件长度不为0，则为真
+		-h filename 如果文件是软链接，则为真
+		filename1 -nt filename2 如果 filename1比 filename2新，则为真。
+		filename1 -ot filename2 如果 filename1比 filename2旧，则为真。

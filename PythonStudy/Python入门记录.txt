@@ -284,10 +284,34 @@
 	ps:
 		通过类名调用的是函数，通过类对象调用的是方法，函数需要手动传入self，方法不需要传self
 	
+	继承：
+		(1)定义子类时，可以将需要继承的类（指定超类）写在子类名后的圆括号中；
+		(2)子类中与超类的同名方法会覆盖超类的同名方法，即重写；
+		(3)定义子类时可以指定多个超类，子类名的圆括号中以逗号分隔多个超类，即多重继承；
+		(4)多重继承中超类的书写顺序，对子类实现产生影响，写在前面的超类属于先继承，
+			先继承的类的方法会重写后继承的类的方法；
+			示例代码：
+			class Dialog(Widget):
+				modal = False
+				width = minWidth = 15
+				height = minHeight = 10
+
+				def setCheckable(self, modal):
+					self.modal = modal
+
+				def resize(self, w_value, h_value):
+					if w_value > self.minWidth:
+						self.width = w_value
+					if h_value > self.minHeight:
+						self.height = h_value
 	
-	
-	
-	
+			ps:
+				类Dialog指定超类为Widget类，即Dialog继承自Widget类;
+				
+				类Dialog中定义了一个与超类Widget中同名的方法resize，即子类Dialog重写了超类的同名方法；
+				
+				
+			
 	
 	
 	
