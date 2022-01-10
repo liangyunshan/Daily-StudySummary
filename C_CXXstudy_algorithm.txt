@@ -1,0 +1,15 @@
+//求两个数的最大公约数
+int rgcd(int v1, int v2)
+{
+	if (v2 != 0)
+		return rgcd(v2, v1%v2);
+	return v1;
+}
+
+//求阶乘
+int func(int val)
+{
+    if (val > 1)
+        return func(val-1) * val;
+    return 1;
+}

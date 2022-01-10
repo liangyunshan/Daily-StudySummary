@@ -1,0 +1,62 @@
+1、撤销文件修改（git checkout）
+	（1）使用git log命令查看提交记录日志，可以根据提交日志选择需要回退到哪个版本，
+		 每次提交的日志信息结构为：
+								+commit 版本唯一标识号
+								+Author: 提交用户名 提交用户邮箱
+								+Data：提交日期
+									   提交描述信息
+		 每个标识号都是唯一的，可以在checkout时使用，标识回退到某个版本；
+	 （2）使用git checkout 版本号 需要回退的文件名，如：git checkout 130ff4993da69e2 Test.txt，
+	 
+	 （3）使用git checkout -b [需要新建的本地分支名] [需要追踪的远程分支名]；
+			如：git checkout -b yunos60_6x_tmp saic/yunos60_6x_tmp
+			在本地新建yunos60_6x_tmp分支，并跟踪远程的saic/yunos60_6x_tmp分支
+	
+2、撤销提交（git reset）：	
+2.1、如果需要撤销当前的提交，同时不改变本地文件，撤销提交后只回退了commit的信息：
+	（1）使用git log 查询提交日志找到当前提交的上一次提交记录的版本id号
+	（2）git reset --soft 当前提交的上一次提交的版本id号
+		比如：git reset --soft cb9fc05156bb61e1f946562dda0657c9bc505d38
+2.2、如果需要撤销当前的提交，同时本地实际文件更新到上一次提交的状态
+	（1）使用git log 查询提交日志找到当前提交的上一次提交记录的版本id号
+	（2）git reset --hard 当前提交的上一次提交的版本id号
+		比如：git reset --hard cb9fc05156bb61e1f946562dda0657c9bc505d38
+		
+3、希望HEAD从指定的提交分离，删除全部本地分支
+	 首先执行git checkout --detach
+	 执行该命令后显示* （头指针分离于 [指定的commi ID]）
+	 可以用于删除本地分支，即执行完git checkout --detach后执行git branch -d [本地分支名]
+	 
+4、希望查看仓库中最近的修改变动情况
+	（1）git log查看最近的提交记录，根据commit message可以了解一部分修改变动情况
+	     ps:
+			按方向键可以查看更多的提交记录
+			
+	（2）git show [commit ID] [--stat] [file name] 查看[某次提交] [状态变化][某个文件]的变动情况，
+	默认显示仓库中最新一次提交的变动情况
+
+5、本地分支没有跟踪远程分支，将本地分支推送到远程仓库
+	git push --set-upstream origin [分支名称]
+
+
+6、将多次提交记录合并成单次提交
+	（1）git rebase -i [待合并所有分支中最早一次提交的前一次commit ID]
+	（2）将需要被合并的提交记录前的pick改成s
+	（3）删除不需要的commit备注
+	（4）git push -f 强制推送本地仓库中的代码到远程仓库
+
+7、本地仓库分支信息与远程仓库保持同步
+7.1从本地仓库中裁剪掉远程仓库中已经不存在的分支
+	远程仓库中删除了某个分支，在本地使用git branch -a还能看到该分支
+	git remote prune [远程仓库主机名称]
+	举例：git remote prune origin
+7.2本地仓库获取远程仓库中的分支更新
+	远程仓库中新建了分支，本地仓库中使用git branch -a看不到该分支
+	git remote update [远程仓库主机名称] --prune
+	举例：git remote update origin --prune
+
+8、将其他的仓库源码作为子模块添加到目标仓库中
+	（1）git submodule add [url] [path] 添加子模块，url为子模块的仓库路径，path为该子模块本地存放路径
+	（2）git submodule update --init --recursive 拉取并更新子模块源码到本地
+
+
