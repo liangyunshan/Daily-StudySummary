@@ -59,4 +59,11 @@
 	（1）git submodule add [url] [path] 添加子模块，url为子模块的仓库路径，path为该子模块本地存放路径
 	（2）git submodule update --init --recursive 拉取并更新子模块源码到本地
 
+9、推送本地提交到远程仓库（需要code review）
+	将本地提交推送到gerrit上，一般都需要code review，没有问题后才能merge到远程仓库中
+	git push [远程仓库主机名称] HEAD:refs/for/[远程分支名称]
+	HEAD是一个指针，指向正在工作的本地分支，可以将HEAD当做本地分支的别名，refs/for表示代码推送到服务器后需要code review 
+
+10、git中打patch失败可能是因为空白字符导致的
+	git am [patch文件] --ignore-whitespace
 
