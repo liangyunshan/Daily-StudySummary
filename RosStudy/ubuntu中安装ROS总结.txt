@@ -1,0 +1,46 @@
+目前最近的几个Ubuntu版本与ROS版本的对应关系如下：
+【Ubuntu】	【ROS】			【End of Life】
+14.04 LTS	indigo lgloo		April, 2019
+16.04 LTS	Kinetic Kame		April, 2021
+18.04 LTS	Melodic Morenia		May, 2023
+20.04 LTS	Noetic Ninjemys 	May, 2025
+		(Recommended)	
+
+主要几个ROS版本安装见如下官方链接：
+https://wiki.ros.org/cn/ROS/Installation
+
+我们这里在ubuntu16.04中安装kinetic版本的ROS：
+官方详细安装教程见如下地址：
+https://wiki.ros.org/cn/kinetic/Installation/Ubuntu
+1、添加ros安装源：
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+
+2、安装ros公钥：
+wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+
+3、更新ubuntu中软件包索引
+sudo apt-get update
+
+4、安装ros-kinetic-desktop-full：
+sudo apt-get install ros-kinetic-desktop-full
+
+5、配置终端中ros运行环境
+echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+
+ps:
+配置环境完成后查看ROS相关的环境变量，如果有相关内容则表示配置成功
+执行命令：export |grep ROS
+配置成功结果：
+declare -x ROSLISP_PACKAGE_DIRECTORIES=""
+declare -x ROS_DISTRO="kinetic"
+declare -x ROS_ETC_DIR="/opt/ros/kinetic/etc/ros"
+declare -x ROS_MASTER_URI="http://localhost:11311"
+declare -x ROS_PACKAGE_PATH="/opt/ros/kinetic/share"
+declare -x ROS_PYTHON_VERSION="2"
+declare -x ROS_ROOT="/opt/ros/kinetic/share/ros"
+declare -x ROS_VERSION="1"
+
+
+6、安装ROS相关工具以及ROS包依赖项：
+sudo apt-get install python-rosinstall python-rosinstall-generator python-wstool build-essential

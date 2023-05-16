@@ -1,0 +1,10 @@
+set_target_properties(${PROJECT_NAME}_node PROPERTIES OUTPUT_NAME node PREFIX "")
+上面的语句实现的功能是：
+	设置${PROJECT_NAME}_node的OUTPUT_NAME属性为node，即将目标文件的名称变为node
+	设置${PROJECT_NAME}_node的PREFIX属性为""，即去掉目标文件的前缀
+		//比如目标是动态/静态库，一般都有前缀lib，这条指令就会去掉前缀lib
+
+
+cmake -p example.cmake
+	用于执行example.cmake中的内容
+

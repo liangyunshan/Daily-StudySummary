@@ -67,3 +67,4 @@
 10、git中打patch失败可能是因为空白字符导致的
 	git am [patch文件] --ignore-whitespace
 
+

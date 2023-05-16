@@ -1,0 +1,6 @@
+ros本身提供了一套基本的Rviz框架，具备二次开发的能力。开发人员需要基于Rviz开发自定义插件，自定义插件主要分为三类：Display、Panel、Tool
+
+安装好Ros后，可以运行自带的Rviz工具，步骤如下：
+1、在一个终端中运行master节点：rosmaster
+2、在另一个终端中运行rviz：rosrun rviz rviz
+

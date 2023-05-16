@@ -1,0 +1,62 @@
+通过catkin_create_qt_pkg创建基于Qt的功能包，查看功能包中的package.xml与CMakeLists.txt后，发现是基于Qt4实现的
+
+1、确认ros-Kinetic中自带的Qt是哪个版本；
+2、怎么基于Qt5实现桌面应用；
+
+//matplotlib绘制
+import matplotlib.pyplot as plt
+import numpy as np
+
+refuel_km = np.array([0, 505.4, 1070, 1690])
+refuel_cost = np.array([40.1, 50, 63, 55])
+
+fig, ax = plt.subplots(figsize=(12, 3))
+
+# plt.scatter(refuel_km, np.full_like(refuel_km, 0), marker='o', s=100, color='lime', edgecolors='black', zorder=3,
+#             label='refuel')
+plt.bar(refuel_km, refuel_cost, bottom=15, color='lime', ec='black', width=20, label='refuel cost')
+
+ax.spines['bottom'].set_position('zero')
+ax.spines['top'].set_color('none')
+ax.spines['right'].set_color('none')
+ax.spines['left'].set_color('none')
+ax.tick_params(axis='x', length=20)
+ax.set_yticks([])  # turn off the yticks
+
+_, xmax = ax.get_xlim()
+ymin, ymax = ax.get_ylim()
+ax.set_xlim(-15, xmax)
+ax.set_ylim(ymin, ymax + 25)  # make room for the legend
+ax.text(xmax, -5, "km", ha='right', va='top', size=14)
+plt.legend(ncol=5, loc='upper left')
+
+plt.tight_layout()
+plt.show()
+
+
+    # scatter.add_xaxis(xaxis_data=timeline_data)
+    # scatter.add_yaxis(
+    #     series_name="",
+    #     y_axis=error_data,
+    #     symbol_size=20,
+    #     label_opts=opts.LabelOpts(is_show=False),
+    # )
+    # scatter.set_series_opts()
+    # scatter.set_global_opts(
+    #     xaxis_opts=opts.AxisOpts(
+    #         splitline_opts=opts.SplitLineOpts(is_show=True)
+    #     ),
+    #     yaxis_opts=opts.AxisOpts(
+    #         type_="time",
+    #         axistick_opts=opts.AxisTickOpts(is_show=True),
+    #         splitline_opts=opts.SplitLineOpts(is_show=True),
+    #     ),
+    #     tooltip_opts=opts.TooltipOpts(is_show=False),
+    # )
+    # #     markpoint_opts=opts.MarkPointOpts(
+    # #         data=[
+    # #             opts.MarkPointItem(coord=[timeline_data[20], error_data[20]])
+    # #         ]
+    # #     ),
+    # # scatter.reversal_axis()
+

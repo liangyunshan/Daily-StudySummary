@@ -1,0 +1,7 @@
+lcov --rc lcov_branch_coverage=1 --capture --directory ../ --output-file coverage.info
+
+lcov --remove coverage.info '/usr/include/*' '5/*' 'demo/unit_test/*' --rc lcov_branch_coverage=1 -o coverage_filter.info
+
+genhtml --branch-coverage --highlight --legend --output-directory result coverage_filter.info
+
+
